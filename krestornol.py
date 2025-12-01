@@ -14,12 +14,12 @@ def save_stats(mode, result, board_size, first_player):
                 f"Первый игрок: {first_player} | Результат: {result}\n")
 
 def print_board(board):
-    print("\n    " + " ".join(str(i+1) for i in range(len(board))))
+    print("\n    " + " ".join(str(i+1) for i in range(len(board))))  
     
     for i, row in enumerate(board):
         print(f"{i+1}   " + " ".join(row))
 
-def check_winner(board):
+def check_win(board):
     size = len(board)
     for i in range(size):
         if all(board[i][j] == 'x' for j in range(size)) or all(board[j][i] == 'x' for j in range(size)):
@@ -76,7 +76,7 @@ def play_game():
     first_player = current_player
     board = [[' ' for _ in range(size)] for _ in range(size)]
     
-    print(f"\nПервым ходит: {current_player}")
+    print(f"\n Первым ходит: {current_player}")
     
     while True:
         print_board(board)
@@ -85,17 +85,16 @@ def play_game():
             row, col = get_player_move(board, current_player)
         else:
             print("Ход бота...")
-            row, col = bot_move(board)
-            # Показываем ход бота в координатах от 1
+            row, col = bot_move (board)
             print(f"Бот поставил {current_player} на позицию ({row+1}, {col+1})")
         
         board[row][col] = current_player
         
-        result = check_winner(board)
+        result = check_win(board)
         if result:
             print_board(board)
             if result == 'Ничья':
-                print("\nНичья!")
+                print("\n Ничья!")
                 save_stats("Два игрока" if mode == '1' else "Против бота", 
                           "Ничья", size, first_player)
             else:
@@ -106,7 +105,7 @@ def play_game():
         
         current_player = 'o' if current_player == 'x' else 'x'
 
-def main():
+def menu():
     while True:
         play_game()
         again = input("\n Хотите сыграть еще раз? Да/Нет: ").lower()
@@ -114,5 +113,4 @@ def main():
             print("Спасибо за игру, приходите за следующей победой!")
             break
 
-if __name__ == "__main__":
-    main()
+menu()
