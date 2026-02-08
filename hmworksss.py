@@ -209,7 +209,7 @@ while True:
     choice = input("Ваш выбор: ")
 
     if choice == "1":
-        print("\n--- Режим библиотекаря ---")
+        print("\n Режим библиотекаря")
         print("1. Добавить книгу")
         print("2. Удалить книгу")
         print("3. Зарегистрировать пользователя")
@@ -233,9 +233,8 @@ while True:
             library.view_all_books()
 
     elif choice == "2":
-        print("\n--- Режим пользователя ---")
+        print("\n Режим пользователя")
         name = input("Введите ваше имя: ")
-        # Проверка регистрации
         user_exists = any(u.name == name for u in library.users)
         if not user_exists:
             print("Вы не зарегистрированы. Обратитесь к библиотекарю.")
@@ -263,4 +262,5 @@ while True:
         print("Данные сохранены. До свидания!")
         break
     else:
+
         print("Неверный выбор.")
