@@ -1,0 +1,139 @@
+import 'dart:io';
+import 'dart:math';
+import 'dart:convert';
+import 'package:characters/characters.dart';
+
+enum Mood {
+  happy,
+  cool,
+  love,
+  sad,
+  angry,
+  sleepy,
+  surprised,
+  scared,
+  tired,
+  mischievous;
+}
+
+extension MoodData on Mood {
+  String get emoji {
+    switch (this) {
+      case Mood.happy:
+        return '\u{1F600}';
+      case Mood.cool:
+        return '\u{1F60E}';
+      case Mood.love:
+        return '\u{1F60D}';
+      case Mood.sad:
+        return '\u{1F622}';
+      case Mood.angry:
+        return '\u{1F621}';
+      case Mood.sleepy:
+        return '\u{1F634}';
+      case Mood.surprised:
+        return '\u{1F632}';
+      case Mood.scared:
+        return '\u{1F628}';
+      case Mood.tired:
+        return '\u{1F62E}';
+      case Mood.mischievous:
+        return '\u{1F608}';
+    }
+  }
+
+  String get description {
+    switch (this) {
+      case Mood.happy:
+        return 'радостный';
+      case Mood.cool:
+        return 'взволнованный';
+      case Mood.love:
+        return 'влюблённый';
+      case Mood.sad:
+        return 'грустный';
+      case Mood.angry:
+        return 'злой';
+      case Mood.sleepy:
+        return 'сонный';
+      case Mood.surprised:
+        return 'удивлённый';
+      case Mood.scared:
+        return 'испуганный';
+      case Mood.tired:
+        return 'уставший';
+      case Mood.mischievous:
+        return 'хитрый';
+    }
+  }
+
+  int get energy {
+    switch (this) {
+      case Mood.happy:
+        return 10;
+      case Mood.cool:
+        return 9;
+      case Mood.love:
+        return 8;
+      case Mood.sad:
+        return 3;
+      case Mood.angry:
+        return 4;
+      case Mood.sleepy:
+        return 2;
+      case Mood.surprised:
+        return 7;
+      case Mood.scared:
+        return 5;
+      case Mood.tired:
+        return 3;
+      case Mood.mischievous:
+        return 6;
+    }
+  }
+}
+
+void main() {
+  print('Введите ваше имя:');
+  String name = stdin.readLineSync(encoding: latin1)?.trim() ?? 'Гость';
+  if (name.isEmpty) name = 'Гость';
+
+  print('\n Генерируем случайное настроение...');
+  
+  final random = Random();
+  final moods = Mood.values;
+  final selectedMood = moods[random.nextInt(moods.length)];
+
+  print('Привет, $name! Твое настроение: ${selectedMood.emoji} ${selectedMood.description} (энергия: ${selectedMood.energy}/10)');
+
+  print('\n Юникод вашего эмодзи:');
+  int i = 1;
+  for (var rune in selectedMood.emoji.runes) {
+    print('  Кодовая точка $i: U+${rune.toRadixString(16).toUpperCase()}');
+    i++;
+  }
+
+  print('\n Введите комбинацию эмодзи для анализа (или просто нажмите Enter, чтобы пропустить):');
+  String complexEmoji = stdin.readLineSync(encoding: utf8) ?? '';
+  
+  if (complexEmoji.isNotEmpty) {
+    print('\n Анализ строки "$complexEmoji":');
+    print('- 16-битных единиц: ${complexEmoji.length}');
+    print('- Кодовых точек: ${complexEmoji.runes.length}');
+    print('- Реальных символов: ${complexEmoji.characters.length}');
+    
+    print('\n Подробный вывод юникода:');
+    int idx = 1;
+    for (var character in complexEmoji.characters) {
+      print('Символ $idx: $character');
+      for (var rune in character.runes) {
+        print('  → U+${rune.toRadixString(16).toUpperCase()}');
+      }
+      idx++;
+    }
+  } else {
+    print('\n Вы не ввели эмодзи для анализа.');
+  }
+
+  print('\n Спасибо, ждем вас еще, забегайте!');
+}
