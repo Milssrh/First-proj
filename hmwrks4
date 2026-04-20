@@ -53,7 +53,6 @@ def handle_client(client_socket, client_address):
     broadcast(f" {client_address} покинул чат *")
 
 def start_server(host='127.0.0.1', port=5000):
-    """Запускает сервер"""
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_socket.bind((host, port))
@@ -101,7 +100,6 @@ import threading
 import sys
 
 def receive_messages(client_socket):
-    """Поток для приема сообщений от сервера"""
     while True:
         try:
             data = client_socket.recv(1024)
@@ -111,7 +109,7 @@ def receive_messages(client_socket):
             
             message = data.decode('utf-8')
             print(f"\n{message}")
-            print("Вы: ", end="", flush=True)  # Возвращает приглашение для ввода
+            print("Вы: ", end="", flush=True)  
             
         except ConnectionResetError:
             print("\n Соединение с сервером потеряно")
@@ -124,10 +122,9 @@ def receive_messages(client_socket):
             break
     
     print("Завершение работы клиента...")
-    os._exit(0)  # Принудительно завершает программу
+    os._exit(0)  
 
 def send_messages(client_socket):
-    """Главный поток для отправки сообщений на сервер"""
     print("Введите /quit для выхода из чата")
     print("=" * 50)
     
@@ -139,7 +136,7 @@ def send_messages(client_socket):
                 print("Отключение от чата...")
                 break
             
-            if message.strip():  # Отправляет только непустые сообщения
+            if message.strip():  
                 client_socket.send(message.encode('utf-8'))
                 
         except (ConnectionResetError, BrokenPipeError):
@@ -157,7 +154,6 @@ def send_messages(client_socket):
     sys.exit(0)
 
 def start_client(host='127.0.0.1', port=5000):
-    """Запускает клиента"""
     try:
         client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client_socket.connect((host, port))
@@ -169,8 +165,7 @@ def start_client(host='127.0.0.1', port=5000):
     except Exception as e:
         print(f"Ошибка подключения: {e}")
         return
-    
-    # Запускает поток для приема сообщений (этож даймон)
+
     receive_thread = threading.Thread(
         target=receive_messages,
         args=(client_socket,),
@@ -178,9 +173,8 @@ def start_client(host='127.0.0.1', port=5000):
     )
     receive_thread.start()
     
-    # Основной поток занимается отправкой сообщений
     send_messages(client_socket)
 
 if __name__ == "__main__":
-    import os  # Для os._exit в receive_messages
+    import os 
     start_client()
