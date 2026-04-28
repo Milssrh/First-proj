@@ -1,0 +1,409 @@
+//28/04/2026
+//homeworks
+// 1. Классы «Кружка» и «Человек». Дайте возможность человеку пить из кружки.
+class Kruzhka {
+  int _voda = 100;
+  
+  int get voda => _voda;
+  
+  void pit() {
+    if (_voda >= 10) {
+      _voda -= 10;
+      print('Сделал глоток. Осталось $_voda мл');
+    } else {
+      print('Кружка пуста!');
+    }
+  }
+}
+
+class Chelovek {
+  String _name;
+  
+  Chelovek(this._name);
+  
+  String get name => _name;
+  
+  void pitIzKruzhki(Kruzhka kruzhka) {
+    print('$_name пьет из кружки');
+    kruzhka.pit();
+  }
+}
+// 2. Реализуйте класс «Шкаф», в состав которого входит несколько систем хранения. У пользователя должна быть возможность поместить вещи в шкаф и забрать их оттуда.
+class Polka {
+  List<String> _veshi = [];
+  List<String> get veshi => _veshi;
+  
+  void polozhit(String vesh) {
+    _veshi.add(vesh);
+    print('Положил $vesh на полку');
+  }
+  
+  String zabrat(String vesh) {
+    if (_veshi.contains(vesh)) {
+      _veshi.remove(vesh);
+      print('Забрал $vesh с полки');
+      return vesh;
+    } else {
+      print('$vesh не найдено');
+      return '';
+    }
+  }
+}
+
+class Shkaf {
+  List<Polka> _polki = [];
+  
+  Shkaf(int kolichestvoPolok) {
+    for (int i = 0; i < kolichestvoPolok; i++) {
+      _polki.add(Polka());
+    }
+  }
+  
+  void polozhitVShkaf(int nomerPolki, String vesh) {
+    if (nomerPolki < _polki.length) {
+      _polki[nomerPolki].polozhit(vesh);
+    } else {
+      print('Такой полки нет');
+    }
+  }
+  
+  void zabratIzShkafa(int nomerPolki, String vesh) {
+    if (nomerPolki < _polki.length) {
+      _polki[nomerPolki].zabrat(vesh);
+    } else {
+      print('Такой полки нет');
+    }
+  }
+}
+// 3. Реализуйте класс «Гриф» и «Блин». На гриф с левой и с правой стороны можно навешивать блины. В конструкторе класса «Гриф» передавайте параметр максимальной загрузки грифа по весу.
+class Blin {
+  int _ves;
+  
+  Blin(this._ves);
+  
+  int get ves => _ves;
+}
+
+class Grif {
+  int _maxVes;
+  int _tekushiyVes = 0;
+  List<Blin> _levieBliny = [];
+  List<Blin> _pravyeBliny = [];
+  
+  Grif(this._maxVes);
+  
+  int get maxVes => _maxVes;
+  int get tekushiyVes => _tekushiyVes;
+  
+  bool navesitBl(Blin blin, String storona) {
+    if (_tekushiyVes + blin.ves <= _maxVes) {
+      if (storona == 'levo') {
+        _levieBliny.add(blin);
+      } else if (storona == 'pravo') {
+        _pravyeBliny.add(blin);
+      }
+      _tekushiyVes += blin.ves;
+      print('Навесил блин ${blin.ves}кг на $storona сторону');
+      return true;
+    } else {
+      print('Превышен максимальный вес!');
+      return false;
+    }
+  }
+}
+
+// 4. Реализуйте класс для конвертации денег из одной валюты в другую.
+class KonverterValut {
+  static double kursUSD = 75.5;
+  static double kursEUR = 85.0;
+  
+  static double rubVUsd(double rub) {
+    return rub / kursUSD;
+  }
+  
+  static double rubVEur(double rub) {
+    return rub / kursEUR;
+  }
+  
+  static double usdVRub(double usd) {
+    return usd * kursUSD;
+  }
+  
+  static double eurVRub(double eur) {
+    return eur * kursEUR;
+  }
+}
+
+// 5. Посредством дженериков реализуйте класс «Гараж», где можно хранить различные объекты.
+class Garazh<T> {
+  List<T> _predmety = [];
+  
+  List<T> get predmety => _predmety;
+  
+  void polozhit(T predmet) {
+    _predmety.add(predmet);
+    print('Положил в гараж: $predmet');
+  }
+  
+  T vzat() {
+    if (_predmety.isNotEmpty) {
+      T predmet = _predmety.removeLast();
+      print('Взял из гаража: $predmet');
+      return predmet;
+    } else {
+      print('Гараж пуст');
+      return null as T;
+    }
+  }
+}
+
+// 6. Напишите класс, в котором перегружены все базовые арифметические операции и класс. Проверьте его работу.
+class Chislo {
+  int _znachenie;
+  
+  Chislo(this._znachenie);
+  
+  int get znachenie => _znachenie;
+  
+  Chislo operator +(Chislo other) {
+    return Chislo(_znachenie + other._znachenie);
+  }
+  
+  Chislo operator -(Chislo other) {
+    return Chislo(_znachenie - other._znachenie);
+  }
+  
+  Chislo operator *(Chislo other) {
+    return Chislo(_znachenie * other._znachenie);
+  }
+  
+  double operator /(Chislo other) {
+    return _znachenie / other._znachenie;
+  }
+  
+  @override
+  String toString() {
+    return '$_znachenie';
+  }
+}
+
+// 7. Напишите класс «Автомобиль», для таких состояний, как: стоп, ехать, повернуть, используйте перечисления.
+enum Sostoianie { stop, ehat, povorot }
+
+class Avtomobil {
+  Sostoianie _sostoianie = Sostoianie.stop;
+  
+  Sostoianie get sostoianie => _sostoianie;
+  
+  set sostoianie(Sostoianie novoe) {
+    _sostoianie = novoe;
+    if (_sostoianie == Sostoianie.stop) {
+      print('Автомобиль остановился');
+    } else if (_sostoianie == Sostoianie.ehat) {
+      print('Автомобиль едет');
+    } else if (_sostoianie == Sostoianie.povorot) {
+      print('Автомобиль поворачивает');
+    }
+  }
+}
+
+// 8. Напишите базовый класс «Геометрическая фигура» и несколько производных классов (прямоугольник, треугольник, окружность и т.д.).
+abstract class GeometricheskayaFigura {
+  double ploshad();
+}
+class Pryamougolnik extends GeometricheskayaFigura {
+  double _shirina;
+  double _vysota; 
+  Pryamougolnik(this._shirina, this._vysota);
+  @override
+  double ploshad() {
+    return _shirina * _vysota;
+  }
+}
+
+class Treugolnik extends GeometricheskayaFigura {
+  double _osnovanie;
+  double _vysota;
+  
+  Treugolnik(this._osnovanie, this._vysota);
+  
+  @override
+  double ploshad() {
+    return 0.5 * _osnovanie * _vysota;
+  }
+}
+
+class Okruzhnost extends GeometricheskayaFigura {
+  double _radius;
+  
+  Okruzhnost(this._radius);
+  
+  @override
+  double ploshad() {
+    return 3.14 * _radius * _radius;
+  }
+}
+
+// 9. Напишите класс для перевода значения числа из одной системы счисления (десятичная, шестнадцатеричная и восьмеричная) в другую.
+class KonverterSistem {
+  static String desiatichnaya(int chislo) {
+    return chislo.toString();
+  }
+  
+  static String shestnadcatirichnaya(int chislo) {
+    return chislo.toRadixString(16).toUpperCase();
+  }
+  
+  static String vosmerichnaya(int chislo) {
+    return chislo.toRadixString(8);
+  }
+  
+  static int vDesiatichnuyu(String chislo, int osnovanie) {
+    return int.parse(chislo, radix: osnovanie);
+  }
+}
+
+// 10. Напишите класс, который содержит список с геометрическими фигурами и позволяет находить фигуру с максимальной площадью.
+class SpisokFigur {
+  List<GeometricheskayaFigura> _figury = [];
+  
+  List<GeometricheskayaFigura> get figury => _figury;
+  
+  void dobavitFiguru(GeometricheskayaFigura figura) {
+    _figury.add(figura);
+  }
+  
+  GeometricheskayaFigura naitiMaxPloshad() {
+    if (_figury.isEmpty) {
+      print('Нет фигур');
+      return Pryamougolnik(0, 0);
+    }
+    
+    GeometricheskayaFigura maxFigura = _figury[0];
+    for (var figura in _figury) {
+      if (figura.ploshad() > maxFigura.ploshad()) {
+        maxFigura = figura;
+      }
+    }
+    print('Максимальная площадь: ${maxFigura.ploshad()}');
+    return maxFigura;
+  }
+}
+
+// 11. Напишите класс «Стол», на который можно ставить различные столовые приборы (производные классы от базового) и убирать их со стола.
+class StoloviyPribor {
+  String _nazvanie;
+  
+  StoloviyPribor(this._nazvanie);
+  
+  String get nazvanie => _nazvanie;
+}
+
+class Nozh extends StoloviyPribor {
+  Nozh() : super('Нож');
+}
+
+class Vilka extends StoloviyPribor {
+  Vilka() : super('Вилка');
+}
+
+class Lozhka extends StoloviyPribor {
+  Lozhka() : super('Ложка');
+}
+
+class Stol {
+  List<StoloviyPribor> _pribory = [];
+  
+  List<StoloviyPribor> get pribory => _pribory;
+  
+  void postavit(StoloviyPribor pribor) {
+    _pribory.add(pribor);
+    print('Поставил на стол: ${pribor.nazvanie}');
+  }
+  
+  void ubrat(StoloviyPribor pribor) {
+    if (_pribory.contains(pribor)) {
+      _pribory.remove(pribor);
+      print('Убрал со стола: ${pribor.nazvanie}');
+    } else {
+      print('Такого прибора нет на столе');
+    }
+  }
+}
+
+// Главная функция - точка входа в программу
+void main() {
+  print(' 1. Кружка и Человек ');
+  var kruzhka = Kruzhka();
+  var chelovek = Chelovek('Иван');
+  chelovek.pitIzKruzhki(kruzhka);
+  print('Осталось воды в кружке: ${kruzhka.voda} мл');
+  
+  print('\n 2. Шкаф ');
+  var shkaf = Shkaf(3);
+  shkaf.polozhitVShkaf(0, 'Книга');
+  shkaf.polozhitVShkaf(1, 'Одежда');
+  shkaf.zabratIzShkafa(0, 'Книга');
+  
+  print('\n 3. Гриф и Блин ');
+  var grif = Grif(100);
+  grif.navesitBl(Blin(20), 'levo');
+  grif.navesitBl(Blin(20), 'pravo');
+  print('Текущий вес грифа: ${grif.tekushiyVes} кг');
+  
+  print('\n 4. Конвертер валют ');
+  print('100 рублей = ${KonverterValut.rubVUsd(100)} долларов');
+  print('100 рублей = ${KonverterValut.rubVEur(100)} евро');
+  
+  print('\n 5. Гараж с дженериками ');
+  var garazhDlyaMashin = Garazh<String>();
+  garazhDlyaMashin.polozhit('BMW');
+  garazhDlyaMashin.polozhit('Toyota');
+  garazhDlyaMashin.vzat();
+  
+  print('\n 6. Перегрузка операций ');
+  var a = Chislo(10);
+  var b = Chislo(5);
+  print('$a + $b = ${a + b}');
+  print('$a - $b = ${a - b}');
+  print('$a * $b = ${a * b}');
+  print('$a / $b = ${a / b}');
+  
+  print('\n 7. Автомобиль ');
+  var avto = Avtomobil();
+  avto.sostoianie = Sostoianie.ehat;
+  avto.sostoianie = Sostoianie.povorot;
+  avto.sostoianie = Sostoianie.stop;
+  
+  print('\n 8. Геометрические фигуры ');
+  var pryam = Pryamougolnik(5, 4);
+  var treug = Treugolnik(6, 3);
+  var okr = Okruzhnost(3);
+  print('Площадь прямоугольника: ${pryam.ploshad()}');
+  print('Площадь треугольника: ${treug.ploshad()}');
+  print('Площадь окружности: ${okr.ploshad()}');
+  
+  print('\n 9. Конвертер систем счисления ');
+  int chislo = 255;
+  print('Число $chislo:');
+  print('Десятичная: ${KonverterSistem.desiatichnaya(chislo)}');
+  print('Шестнадцатеричная: ${KonverterSistem.shestnadcatirichnaya(chislo)}');
+  print('Восьмеричная: ${KonverterSistem.vosmerichnaya(chislo)}');
+  
+  print('\n 10. Список фигур с макс. площадью ');
+  var spisok = SpisokFigur();
+  spisok.dobavitFiguru(Pryamougolnik(10, 5));
+  spisok.dobavitFiguru(Treugolnik(8, 4));
+  spisok.dobavitFiguru(Okruzhnost(6));
+  spisok.naitiMaxPloshad();
+  
+  print('\n 11. Стол и столовые приборы ');
+  var stol = Stol();
+  var nozh = Nozh();
+  var vilka = Vilka();
+  var lozhka = Lozhka();
+  stol.postavit(nozh);
+  stol.postavit(vilka);
+  stol.postavit(lozhka);
+  stol.ubrat(vilka);
+}
